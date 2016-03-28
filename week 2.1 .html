@@ -1,0 +1,84 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <style>
+      body {
+        margin: 0px;
+        padding: 0px;
+      }
+	  canvas{
+	  background:url("http://www.freebiesgallery.com/wp-content/uploads/2013/08/light-blue-background-3.jpg")}
+    </style>
+  </head>
+  <body>
+    <center><canvas id="myCanvas" width="250" height="250"></canvas></center>
+    <script>
+	var x1;
+	var x2;
+	var y1;
+	var y2;
+	var timer = 0;
+	
+	setInterval(function(){increment(); }, 500);   /* .5 seconds */
+
+      function writeMessage(canvas, message) {
+        var context = canvas.getContext('2d');
+        context.clearRect(0, 0, canvas.width, canvas.height);
+        context.font = '18pt Calibri';
+        context.fillStyle = 'black';
+        context.fillText(message, 30, 30);
+		
+      }
+	  function increment(){
+		timer = timer +1;
+	  
+	  
+	  
+	  }
+	  
+	  
+      function getMousePos(canvas, evt) {
+        var rect = canvas.getBoundingClientRect();
+        return {
+          x: evt.clientX - rect.left,
+          y: evt.clientY - rect.top
+        };
+      }
+	  
+      var canvas = document.getElementById('myCanvas');
+	  
+      var context = canvas.getContext('2d');
+
+      canvas.addEventListener('mousedown', function(evt) {
+		
+        
+		var mousePos = getMousePos(canvas, evt);
+		timer =0;
+		x1 = mousePos.x;
+		y1 = mousePos.y;        
+        
+      }, false);
+	  
+	  canvas.addEventListener('mouseup', function(evt) {
+		writeMessage(canvas,evt)
+        var mousePos = getMousePos(canvas, evt);
+		x2 = mousePos.x;
+		y2 = mousePos.y;
+		var w = x2 - x1;
+		var h = y2 - y1;
+        var message = 'distance: ' + w +','+ h; /* replace w,h with timer to see time spent*/
+        writeMessage(canvas, message);
+      }, false);
+	  
+	  /*   mouse pos    while helddown___hasbeenpressed___   mouse pos2   if hasbeenpressed true     */
+	  /*canvas.addEventListener('click', function(evt){
+        var mess = 'click';
+		writeMessage(canvas, mess)
+	  }, false);
+	  */
+	  
+	  
+    </script>
+  </body>
+</html>
+    
