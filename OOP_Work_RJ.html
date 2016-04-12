@@ -1,0 +1,142 @@
+<!DOCTYPE HTML>
+
+//   KNOWN ISSUSES:    Mouse up only works inside canvas.      Sensitivity has yet to be implemented.			Somehow velocity should be implemented <br>
+//   ALSO NOTE :  This gives creates a vector every 16 milliseconds that contains the difference between mouse movements.   This should be passed to the other groups.
+<html>
+  <head>
+    <style>
+      body {
+        margin: 0px;
+        padding: 0px;
+      }
+	  canvas{
+	  background:url("http://www.freebiesgallery.com/wp-content/uploads/2013/08/light-blue-background-3.jpg")}
+    </style>
+  </head>
+  <body>
+    <center><canvas id="myCanvas" width="250" height="250"></canvas></center>
+    <script>
+	var timer = 1;						// determines when the mouse pos will update
+	var dragging;						// this is 1 when the mouse is down
+	var oldposx = 0;					// old x and y pos
+	var oldposy = 0;
+	var dif = 0;						// difference between new and old pos
+	var dif2= 0;
+	var angle;
+
+	setInterval(function(){increment(); }, 16);   /* 16  miliseconds    calls the add to timer function */
+      function writeMessage(canvas, message) {							// prints a message on the canvas
+        var context = canvas.getContext('2d');
+        context.clearRect(0, 0, canvas.width, canvas.height);
+        context.font = '18pt Calibri';
+        context.fillStyle = 'black';
+        context.fillText(message, 10, 30);
+		
+		var tri = canvas.getContext('2d');
+		
+		tri.beginPath();
+		tri.moveTo(150, 125); // Right
+		tri.lineTo(130, 75); // Top
+		tri.lineTo(110, 125); // Left
+		tri.rotate(Math.PI / 180) * 135;
+		tri.fill();
+
+
+		
+      }
+	  
+
+	  
+	  function increment(){							// add to timer
+		timer = timer +1;
+	  
+	  
+	  
+	  }
+	  
+	  
+	  function move( x, y){					// calculate the differnce between new and old pos	
+	    dif = x - oldposx;
+		dif2 = y - oldposy;
+		
+		
+		
+		
+		
+		
+		// IMPORTANT
+		var vector = [dif,dif2];					/* This is the vector that contains the movement that occurs every 16 milliseconds.   This should be passed*/
+		// IMPORTANT
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		oldposx = x;
+		oldposy = y;		
+	  }
+	  
+      function getMousePos(canvas, evt) {						//gets current mouse pos
+        var rect = canvas.getBoundingClientRect();
+	
+        return {
+          x: evt.clientX - rect.left,
+          y: evt.clientY - rect.top
+        };
+      }	  
+      var canvas = document.getElementById('myCanvas');					// the canvas element	  
+      var context = canvas.getContext('2d');	  
+	  
+	  var tri = canvas.getContext('2d');
+		
+	  tri.beginPath();
+	  tri.moveTo(150, 125); // Right
+      tri.lineTo(130, 75); // Top
+	  tri.lineTo(110, 125); // Left
+	  tri.fill();
+	  
+	  function mouseMoveListener(evt) {										// occurs when mouse moves,  calls move function if mouse down
+		var posX;
+		var posY;		
+		var bRect = canvas.getBoundingClientRect();		
+		mouseX = (evt.clientX - bRect.left)*(canvas.width/bRect.width);
+		mouseY = (evt.clientY - bRect.top)*(canvas.height/bRect.height);	
+		
+		if (timer > 0){		
+			move(mouseX, mouseY);
+			timer = 0;
+		}
+		var message = 'xpos change: ' + dif + '=' + mouseX + ' -'  + oldposx;					// prints to screen the differnce between old x and new x	    
+		writeMessage(canvas, message);		
+	}      
+	  
+      canvas.addEventListener('mousedown', function(evt) {								// occurs when mouse down  sets dragging to true calls mousemove listener
+	  		var bRect = canvas.getBoundingClientRect();
+			mouseX = (evt.clientX - bRect.left)*(canvas.width/bRect.width);
+			mouseY = (evt.clientY - bRect.top)*(canvas.height/bRect.height);
+			dragging = true;
+			
+			
+			
+			if (dragging) {
+				window.addEventListener("mousemove", mouseMoveListener, false);
+				
+			}
+			window.addEventListener("mouseup", mouseUpListener, false);
+      }, false);
+	  
+	  canvas.addEventListener('mouseup', function(evt) {				// occurs when mouse down  sets dragging to false removes mousemove listener		
+		if (dragging) {
+			
+			dragging = false;
+			window.removeEventListener("mousemove", mouseMoveListener, false);
+		}
+      }, false);
+	  
+    </script>
+  </body>
+</html>
